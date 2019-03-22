@@ -7,14 +7,13 @@ using System.Threading.Tasks;
 namespace CalculatorService.Client.Models
 {
 
-    public class AddResponse
+    public class MultResult
     {
-        public int Sum { get; set; }
+        public int Product { get; set; }
     }
 
-    public class AddRequest
+    public class MultRequest
     {
-        public int[] Addends { get; set; }
+        public int[] Factors { get; set; }
     }
-
 }

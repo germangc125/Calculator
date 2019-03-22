@@ -8,7 +8,7 @@
 
     public class AddRequest
     {
-        public string Addends { get; set; }
+        public int[] Addends { get; set; }
     }
 
 }

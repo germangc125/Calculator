@@ -40,6 +40,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\Div.cs" />
+    <Compile Include="Models\Sqrt.cs" />
+    <Compile Include="Models\Mult.cs" />
+    <Compile Include="Models\Sub.cs" />
     <Compile Include="Models\Add.cs" />
     <Compile Include="Models\Operations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 namespace CalculatorService.Client.Models
 {
 
-    public class AddResponse
+    public class SubResult
     {
-        public int Sum { get; set; }
+        public int Difference { get; set; }
     }
 
-    public class AddRequest
+    public class SubRequest
     {
-        public int[] Addends { get; set; }
+        public int Minuend { get; set; }
+        public int Subtrahend { get; set; }
     }
-
 }

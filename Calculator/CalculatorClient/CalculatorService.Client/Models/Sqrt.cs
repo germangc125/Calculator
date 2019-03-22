@@ -7,14 +7,13 @@ using System.Threading.Tasks;
 namespace CalculatorService.Client.Models
 {
 
-    public class AddResponse
+    public class SqrtResult
     {
-        public int Sum { get; set; }
+        public double Square { get; set; }
     }
 
-    public class AddRequest
+    public class SqrtRequest
     {
-        public int[] Addends { get; set; }
+        public int Number { get; set; }
     }
-
 }

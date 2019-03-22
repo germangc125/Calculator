@@ -1,4 +1,5 @@
-﻿using RestSharp;
+﻿using CalculatorService.Client.Models;
+using RestSharp;
 using System;
 using System.Net;
 using System.Web.Script.Serialization;
@@ -13,146 +14,109 @@ namespace CalculatorService.Client
             do
             {
                 userInput = DisplayMenu();
-
+                Console.WriteLine();
                 switch (userInput)
                 {
+
                     case 1:
-                        //// Request Test Object
-                        //AddRequest request = new AddRequest();
-                        //request.Addends = new int[] { 1, 2, 3 };
-
-                        //HttpWebRequest Req = (HttpWebRequest)WebRequest.Create(String.Format("{0}{1}", "http://localhost:62336/api/Calculator", "add"));
-                        //Req.Method = "POST";
-                        //Req.ContentType = "application/json";
-                        //Req.Headers.Add("X-Evi-Tracking-Id", "12345678");
-                        //HttpWebResponse Resp = (HttpWebResponse)Req.GetResponse();
-
-
-                        Console.WriteLine();
                         Console.WriteLine("Suma");
                         Console.WriteLine("Ingrese los numeros separados por coma.");
-                        string numbers = Console.ReadLine();
-                        var client = new RestClient("http://localhost:62336/api/Calculator");
-                        var request = new RestRequest("Add", Method.POST);
-                        request.AddHeader("cache-control", "no-cache");
-                        string[] arrayEviTrackingID = numbers.Split(' ');
-                        if (arrayEviTrackingID.Length > 1)
+                        string[] numbersAdd = Console.ReadLine().Split(',');
+                        Console.WriteLine("Ingrese id Tracking-Id (opcional):");
+                        string EviTrackingIDAdd = Console.ReadLine();
+                        AddRequest addRequest = new AddRequest();
+                        try
                         {
-                            string EviTrackingID = arrayEviTrackingID[1];
-                            request.AddHeader("x-evi-tracking-id", EviTrackingID);
+                            addRequest.Addends = Array.ConvertAll(numbersAdd, s => int.Parse(s));
+                            Calculator.Add(addRequest, EviTrackingIDAdd);
                         }
-                        else if (arrayEviTrackingID.Length == 1)
+                        catch (Exception)
                         {
-                            request.AddHeader("x-evi-tracking-id", "0");
+                            Console.WriteLine("Hubo un error al ingresar los numeros");
                         }
-
-
-                        var filters = "{\"Addends\":\"" + numbers + "\"}";
-                        request.AddParameter("application/json", filters, ParameterType.RequestBody);
-                        request.RequestFormat = DataFormat.Json;
-                        //request.AddParameter("Addends", numbers);
-
-                        //var filters = "{\"input\"" + "as" + "\"}";
-                        //request.AddParameter("application/json");
-                        IRestResponse response = client.Execute(request);
-                        Console.WriteLine();
-                        if (response.StatusCode == HttpStatusCode.OK)
-                        {
-                            AddResponse result = (new JavaScriptSerializer()).Deserialize<AddResponse>(response.Content);
-                            Console.WriteLine("Resultado:" + result.Sum);
-                        }
-                        else
-                        {
-                            Console.WriteLine("Ha ocurrido un error: " + response.ErrorMessage);
-                        }
-                        Console.WriteLine("Fin del programa, va a volver al menu");
-                        Console.WriteLine();
+               
                         break;
                     case 2:
+                        Console.WriteLine("Resta de 2 numeros");
+                        Console.WriteLine("Ingrese primer numero(Minuendo):");
+                        int Minuendo = Convert.ToInt32(Console.ReadLine());
+                        Console.WriteLine("Ingrese segundo numero(Sustraendo):");
+                        int Sustraendo = Convert.ToInt32(Console.ReadLine());
+                        Console.WriteLine("Ingrese id Tracking-Id (opcional):");
+                        string EviTrackingID =Console.ReadLine();
+                        SubRequest subRequest = new SubRequest();
+                        subRequest.Minuend = Minuendo;
+                        subRequest.Subtrahend = Sustraendo;
+                        Calculator.Sub(subRequest,EviTrackingID);
+
                         break;
 
-                    case 3: break;
+                    case 3:
+                        Console.WriteLine("Multiplicación");
+                        Console.WriteLine("Ingrese los numeros separados por coma.");
+                        string[] numbers = Console.ReadLine().Split(',');
+                        Console.WriteLine("Ingrese id Tracking-Id (opcional):");
+                        string EviTrackingIDMult = Console.ReadLine();
+                        MultRequest MultRequest = new MultRequest();
+                        try
+                        {
+                            MultRequest.Factors = Array.ConvertAll(numbers, s => int.Parse(s));
+                            Calculator.Mult(MultRequest, EviTrackingIDMult);
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine("Hubo un error al ingresar los numeros");
+                        }
+             
 
-                    case 4: break;
+                        break;
 
-                    case 5: break;
+                    case 4:
+                        Console.WriteLine("División");
+                        Console.WriteLine("Ingrese primer numero(Dividendo):");
+                        int Dividendo = Convert.ToInt32(Console.ReadLine());
+                        Console.WriteLine("Ingrese segundo numero(Divisor):");
+                        int Divisor = Convert.ToInt32(Console.ReadLine());
+                        Console.WriteLine("Ingrese id Tracking-Id (opcional):");
+                        string EviTrackingIDDiv = Console.ReadLine();
+                        DivtRequest divtRequest = new DivtRequest();
+                        divtRequest.Dividend = Dividendo;
+                        divtRequest.Divisor = Divisor;
+                        Calculator.Div(divtRequest, EviTrackingIDDiv);
+                        break;
 
+                    case 5:
+                        Console.WriteLine("Raiz Cuadrada");
+                        Console.WriteLine("Ingrese el numero:");
+                        int number = Convert.ToInt32(Console.ReadLine());
+                        Console.WriteLine("Ingrese id Tracking-Id (opcional):");
+                        string EviTrackingIDSqrt = Console.ReadLine();
+                        SqrtRequest sqrtRequest = new SqrtRequest();
+                        sqrtRequest.Number = number;
+                        Calculator.Sqrt(sqrtRequest, EviTrackingIDSqrt);
+                        break;
+
+                    case 6:
+                        Console.WriteLine("Consultar Logs");
+                        Console.WriteLine("Ingrese el id.");
+                        int id;
+                        try
+                        {
+                            id = Convert.ToInt32(Console.ReadLine());
+                            Calculator.Query(id);
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine("Debe ingresar un valor valido: " + ex);
+                        }
+                       
+                        break;
                     default:
                         break;
                 }
 
 
-            } while (userInput != 6);
-
-
-
-
-
-
-
-            //Start:
-            //Console.Write("Enter Name: ");
-            //string name = Console.ReadLine();
-
-
-
-            // var client = new RestClient("http://localhost:62336/api/Calculator");
-            // var request = new RestRequest("Calculate", Method.GET);
-            // request.AddParameter("input", "2");
-            // request.AddHeader("cache-control", "no-cache");
-            // //request.AddHeader("x-­evi-­tracking-­id", "qw");
-            // //var filters = "{\"input\"" + name + "\"}";
-            // //request.AddParameter("application/json", filters, ParameterType.RequestBody);
-            // IRestResponse response = client.Execute(request);
-            //// return response.Content;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            //string apiUrl = "http://localhost:62336/api/Calculator";
-            //var input = new
-            //{
-            //    input = name,
-            //};
-            //string inputJson = (new JavaScriptSerializer()).Serialize(input);
-            //WebClient client = new WebClient();
-            //client.Headers["Content-type"] = "application/json";
-            ////client.Headers["X-­Evi-­Tracking-­Id"] = "1";
-            //client.Encoding = Encoding.UTF8;
-            //string json = client.UploadString(apiUrl + "/Calculate", inputJson);
-            //List<Customer> customers = (new JavaScriptSerializer()).Deserialize<List<Customer>>(json);
-
-
-
-            //if (customers.Count > 0)
-            //{
-            //    foreach (Customer customer in customers)
-            //    {
-            //        Console.WriteLine(customer.ContactName);
-            //    }
-            //}
-            //else
-            //{
-            //    Console.WriteLine("No records found.");
-            //}
-            //Console.WriteLine();
-            //goto Start;
+            } while (userInput != 7);
         }
 
         static public int DisplayMenu()
@@ -165,8 +129,9 @@ namespace CalculatorService.Client
             Console.WriteLine("2. Resta");
             Console.WriteLine("3. Multipliación");
             Console.WriteLine("4. Division");
-            Console.WriteLine("5. Logs Diario");
-            Console.WriteLine("6. Salir");
+            Console.WriteLine("5. Raiz cuadrada");
+            Console.WriteLine("6. Logs Diario");
+            Console.WriteLine("7. Salir");
             var result = Console.ReadLine();
             try
             {
